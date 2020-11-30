@@ -6,9 +6,14 @@ const _ = require("underscore"); // por standar el undercore se usa _, vamos uti
 
 const Usuario = require("../models/usuario");
 
+const {
+  verificaToken,
+  verificaAdmin_Role,
+} = require("../Middlewares/autenticacion"); // usamos un middleware personalizado para verificar el token
+
 const app = express();
 
-app.get("/usuario", function (req, res) {
+app.get("/usuario", verificaToken, (req, res) => {
   let condicion = {
     estado: true,
   };
@@ -40,7 +45,7 @@ app.get("/usuario", function (req, res) {
     });
 });
 
-app.post("/usuario", function (req, res) {
+app.post("/usuario", [verificaToken, verificaAdmin_Role], function (req, res) {
   let body = req.body; // OBTIENE la informacion que viene en el BODY, FUNCIONA PARA POST, PUT, Y DELETE
 
   // crear el objeto que se va enviar en la base de datos
@@ -67,7 +72,10 @@ app.post("/usuario", function (req, res) {
   });
 });
 
-app.put("/usuario/:id", function (req, res) {
+app.put("/usuario/:id", [verificaToken, verificaAdmin_Role], function (
+  req,
+  res
+) {
   let id = req.params.id; // para obtener el parametro
   let body = _.pick(req.body, ["nombre", "email", "img", "role", "estado"]); //la funcion pick de undercore, permite filtrar solo las propiedades que quiero del objeto
   // findByIdAndUpdate actualiza el usuario usando el id como filtro
@@ -90,7 +98,10 @@ app.put("/usuario/:id", function (req, res) {
   );
 });
 
-app.delete("/usuario/:id", function (req, res) {
+app.delete("/usuario/:id", [verificaToken, verificaAdmin_Role], function (
+  req,
+  res
+) {
   let id = req.params.id; // para obtener el parametro que viene por url
 
   /*

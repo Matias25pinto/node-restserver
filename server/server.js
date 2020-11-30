@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 const express = require("express");
 const app = express();
-
+// BodyParser
 const bodyParser = require("body-parser"); // Es un paquete que nos permite leer lo enviado en el body
 const { use } = require("./routes/usuario");
 
@@ -15,7 +15,8 @@ app.use(bodyParser.urlencoded({ extended: false })); // es un middleware
 // parse application/json
 app.use(bodyParser.json()); // es un middleware
 
-app.use(require("./routes/usuario"));
+// configuración de rutas
+app.use(require("./routes/index"));
 
 // Conexion a mongoDB
 mongoose.connect(
