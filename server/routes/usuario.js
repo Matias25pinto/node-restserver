@@ -1,6 +1,6 @@
 const express = require("express");
 
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");//Esta libreria nos permite encriptar los password
 
 const _ = require("underscore"); // por standar el undercore se usa _, vamos utilizar una funcion que permite filtrar elementos de un objeto
 
@@ -45,7 +45,7 @@ app.get("/usuario", verificaToken, (req, res) => {
     });
 });
 
-app.post("/usuario", [verificaToken, verificaAdmin_Role], function (req, res) {
+app.post("/usuario", [verificaToken, verificaAdmin_Role], (req, res)=> {
   let body = req.body; // OBTIENE la informacion que viene en el BODY, FUNCIONA PARA POST, PUT, Y DELETE
 
   // crear el objeto que se va enviar en la base de datos

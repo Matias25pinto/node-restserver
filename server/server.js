@@ -3,6 +3,9 @@ require("./config/config"); // leer el archivo confi, y ejecutarlo, para poder u
 // Using Node.js `require()`
 const mongoose = require("mongoose");
 
+//para crear path
+const path = require("path");
+
 const express = require("express");
 const app = express();
 // BodyParser
@@ -14,6 +17,9 @@ app.use(bodyParser.urlencoded({ extended: false })); // es un middleware
 
 // parse application/json
 app.use(bodyParser.json()); // es un middleware
+
+//Habilitar carpeta public
+app.use(express.static(path.resolve(__dirname, "../public")));
 
 // configuración de rutas
 app.use(require("./routes/index"));
@@ -28,7 +34,7 @@ mongoose.connect(
     useCreateIndex: true,
   },
   (err, res) => {
-    if (err) throw new err();
+    if (err) throw new err(); //Genera un error si err es positivo
 
     console.log("Base de datos ONLINE");
   }
