@@ -1,6 +1,6 @@
 const express = require("express");
 
-const bcrypt = require("bcrypt");//Esta libreria nos permite encriptar los password
+const bcrypt = require("bcrypt"); //Esta libreria nos permite encriptar los password
 
 const _ = require("underscore"); // por standar el undercore se usa _, vamos utilizar una funcion que permite filtrar elementos de un objeto
 
@@ -45,7 +45,7 @@ app.get("/usuario", verificaToken, (req, res) => {
     });
 });
 
-app.post("/usuario", [verificaToken, verificaAdmin_Role], (req, res)=> {
+app.post("/usuario", [verificaToken, verificaAdmin_Role], (req, res) => {
   let body = req.body; // OBTIENE la informacion que viene en el BODY, FUNCIONA PARA POST, PUT, Y DELETE
 
   // crear el objeto que se va enviar en la base de datos
@@ -72,39 +72,40 @@ app.post("/usuario", [verificaToken, verificaAdmin_Role], (req, res)=> {
   });
 });
 
-app.put("/usuario/:id", [verificaToken, verificaAdmin_Role], function (
-  req,
-  res
-) {
-  let id = req.params.id; // para obtener el parametro
-  let body = _.pick(req.body, ["nombre", "email", "img", "role", "estado"]); //la funcion pick de undercore, permite filtrar solo las propiedades que quiero del objeto
-  // findByIdAndUpdate actualiza el usuario usando el id como filtro
-  Usuario.findByIdAndUpdate(
-    id,
-    body,
-    { new: true, runValidators: true },
-    (err, usuarioBD) => {
-      if (err) {
-        return res.status(400).json({
-          ok: false,
-          err,
+app.put(
+  "/usuario/:id",
+  [verificaToken, verificaAdmin_Role],
+  function (req, res) {
+    let id = req.params.id; // para obtener el parametro
+    let body = _.pick(req.body, ["nombre", "email", "img", "role", "estado"]); //la funcion pick de undercore, permite filtrar solo las propiedades que quiero del objeto
+    // findByIdAndUpdate actualiza el usuario usando el id como filtro
+    Usuario.findByIdAndUpdate(
+      id,
+      body,
+      { new: true, runValidators: true },
+      (err, usuarioBD) => {
+        if (err) {
+          return res.status(400).json({
+            ok: false,
+            err,
+          });
+        }
+        return res.json({
+          ok: true,
+          usuario: usuarioBD,
         });
       }
-      return res.json({
-        ok: true,
-        usuario: usuarioBD,
-      });
-    }
-  );
-});
+    );
+  }
+);
 
-app.delete("/usuario/:id", [verificaToken, verificaAdmin_Role], function (
-  req,
-  res
-) {
-  let id = req.params.id; // para obtener el parametro que viene por url
+app.delete(
+  "/usuario/:id",
+  [verificaToken, verificaAdmin_Role],
+  function (req, res) {
+    let id = req.params.id; // para obtener el parametro que viene por url
 
-  /*
+    /*
         // Eliminar el usuario fisicamente de la BD
     Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
         if (err) {
@@ -130,29 +131,30 @@ app.delete("/usuario/:id", [verificaToken, verificaAdmin_Role], function (
     });
     */
 
-  // Eliminar el usuario cambiando el estado de true a false
+    // Eliminar el usuario cambiando el estado de true a false
 
-  let cambiarEstado = {
-    estado: false,
-  };
+    let cambiarEstado = {
+      estado: false,
+    };
 
-  Usuario.findByIdAndUpdate(
-    id,
-    cambiarEstado,
-    { new: true },
-    (err, usuarioBorrado) => {
-      if (err) {
-        return res.status(400).json({
-          ok: false,
-          err,
+    Usuario.findByIdAndUpdate(
+      id,
+      cambiarEstado,
+      { new: true },
+      (err, usuarioBorrado) => {
+        if (err) {
+          return res.status(400).json({
+            ok: false,
+            err,
+          });
+        }
+        return res.json({
+          ok: true,
+          usuario: usuarioBorrado,
         });
       }
-      return res.json({
-        ok: true,
-        usuario: usuarioBorrado,
-      });
-    }
-  );
-});
+    );
+  }
+);
 
 module.exports = app;

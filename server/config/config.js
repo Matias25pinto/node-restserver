@@ -18,8 +18,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || "dev"; // para saber si estoy en 
 //60 minutos
 //24 horas
 //30 días
-process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
-
+//process.env.CADUCIDAD_TOKEN = 60 * 60 * 24 * 30;
+process.env.CADUCIDAD_TOKEN = '48h';
 //=============================
 // SEED de autenticación
 //=============================
@@ -32,11 +32,12 @@ process.env.CLIENT_ID =
   process.env.CLIENT_ID ||
   "84377457215-l3bjkauvqd1a04hffbjq9a2oq788iveg.apps.googleusercontent.com";
 let urlDB;
-
-if (process.env.NODE_ENV === "dev") {
+//tiene que ir en el if para detectar si es en modo producción o en modo desarrollo
+//process.env.NODE_ENV === "dev"
+if (false) {
   urlDB = "mongodb://localhost:27017/cafe";
 } else {
-  urlDB = process.env.MONGO_URI;
+  urlDB = process.env.MONGO_URI || "mongodb+srv://matias25pinto:aspire5734z@cluster0.hmxoq.mongodb.net/cafe?retryWrites=true&w=majority";
 }
 
 process.env.URLDB = urlDB;
